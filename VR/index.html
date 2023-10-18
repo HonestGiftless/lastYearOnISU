@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+  <script src="https://unpkg.com/aframe"></script>
+  <script src="https://unpkg.com/aframe-drag-controls"></script>
+  <title>Document</title>
+</head>
+<body>
+  <a-scene log id="scene1">
+<!--   Ассеты   -->
+    <a-assets>
+      <a-asset-item id="asset1" src="https://cdn.glitch.global/fa20d258-b208-457b-9e8c-bae8447177b0/arrow3.glb?v=1696953281858" scale="0.1 0.1 0.1"></a-asset-item>
+      <a-asset-item id="asset_car" src="https://cdn.glitch.global/fa20d258-b208-457b-9e8c-bae8447177b0/Car_cartoon.gltf?v=1697445267369"></a-asset-item>
+    </a-assets>
+
+    <!--   Камера   -->
+    <a-camera>
+      <a-cursor fusing="false"></a-cursor>
+    </a-camera>
+    
+    <a-entity
+      camera
+      drag-controls="objects: .draggable"
+      look-controls
+      orbit-controls="initialPosition: 0 5 15"
+    ></a-entity>
+    
+    <a-box
+      class="draggable"
+      position="4.586 0 0"
+    ></a-box>
+    
+<!--   Стрелка из ассета   -->
+<!--   Уехать   -->
+    <a-entity id="directionArrow" gltf-model="#asset1" position="0.9 0.7 -0.35" rotation="90 0 -200" scale="3 3 3"></a-entity>
+    <a-entity id="moving_car" gltf-model="#asset_car" position="2.385 -8.711 -10.863" rotation="-14.489 43.104 -18.936" scale="0.338 0.338 0.338">
+<!--       animation="property: position;
+                 to: 5.667 -8.711 -6.987;
+                 dur: 2000;
+                 easing: linear;
+                 dir: alternate;
+                 loop: true" -->
+    </a-entity>
+    <a-text value="Drive to next location" color="white" position="5 -10 -7" scale="5 5 5" rotation="-55 -70 0"></a-text>
+
+<!--   Кольцо информации   -->
+    <a-torus id="info" radius="5" position="-10 -5 19" rotation="10 -20 50" color="#f00" src="https://cdn.glitch.global/fa20d258-b208-457b-9e8c-bae8447177b0/pngwing.com.png?v=1696176453317"
+             animation="property: components.material.material.color;
+                      type: color;
+                      to: white;
+                      dur: 1000;
+                      easing: linear;
+                      dir: alternate;
+                      loop: true">
+      <a-text value="Info" color="white" position="3.2 -2 -1" scale="15 15 15" rotation="190 -30 -135"></a-text>
+    </a-torus>
+
+<!--  Звездопад    -->
+    <a-sphere radius=".5" position="-8 -7 4.5" color="red">
+      <a-text value="Starfall" color="white" position="0 0 3" scale="5 5 5" rotation="-45 135 0"></a-text>
+    </a-sphere>
+    
+
+<!--   Небо   -->
+    <a-sky src="https://cdn.glitch.me/fa20d258-b208-457b-9e8c-bae8447177b0/TEST2.jpg?v=1696178888887"></a-sky>
+  </a-scene>
+  <script type="text/javascript" src="script.js"></script>
+</body>
+</html>
