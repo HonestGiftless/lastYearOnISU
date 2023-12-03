@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+ <head>
+    <meta charset="utf-8" />
+    <title>360&deg; Image</title>
+    <meta name="description" content="360&deg; Image - A-Frame" />
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-animation-component@^4.1.2/dist/aframe-animation-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
+    <script src="https://rawgit.com/zcanter/aframe-gradient-sky/master/dist/gradientsky.min.js"></script>
+    <script>
+      AFRAME.registerComponent('hotspots',{
+        init:function(){
+            this.el.addEventListener('reloadspots',function(evt){
+           
+            var currspotgroup=document.getElementById(evt.detail.currspots);
+            currspotgroup.setAttribute("scale","0 0 0");
+           
+            var newspotgroup=document.getElementById(evt.detail.newspots);
+            newspotgroup.setAttribute("scale","1 1 1");
+          });
+        }
+      });
+     
+      AFRAME.registerComponent('spot',{
+        schema: {
+          linkto: { type: "string", default: "" },
+          spotgroup: { type: "string", default: "" }
+        },
+        init: function() {
+          this.el.setAttribute("src", "#hotspot");
+          this.el.setAttribute("look-at", "#cam");
+          var data = this.data;
+          this.el.addEventListener('click', function() {
+            var sky = document.getElementById("skybox");
+            sky.setAttribute("src", data.linkto);
+            var spotcomp = document.getElementById("spots");
+            var currspots = this.parentElement.getAttribute("id");
+            spotcomp.emit('reloadspots', { newspots: data.spotgroup, currspots: currspots });
+          });
+        }
+      });
+    </script>
+ </head>
+
+ <body>
+    <a-scene>
+      <a-assets>
+        <img
+          id="point1"
+          src="https://cdn.glitch.me/594c3a60-63c0-4741-a37f-f42ba1e0647d/6.png?v=1701547578004"
+        />
+        <img
+          id="point2"
+          src="https://cdn.glitch.global/594c3a60-63c0-4741-a37f-f42ba1e0647d/aos-corr-dim-pano2.jpg?v=1701547316695"
+        />
+        <img
+          id="point3"
+          src="https://cdn.glitch.global/594c3a60-63c0-4741-a37f-f42ba1e0647d/2018_04_21_ES_Supernova_VT_Void-CC.jpg?v=1701543411583"
+        />
+        <img id="hotspot" src="https://cdn.glitch.global/6bf2cbef-3b23-4c7a-aa3f-8c23f2786ac8/479457.png?v=1701335530525" />
+        <img id="eso" src="https://cdn.glitch.global/594c3a60-63c0-4741-a37f-f42ba1e0647d/es-logo-blue.jpg?v=1701553592086" />
+        <img id="eso_in" src="https://cdn.glitch.global/594c3a60-63c0-4741-a37f-f42ba1e0647d/European_Southern_Observatory_(ESO)_logo.svg.png?v=1701554147169" />
+        <img id="chile" src="https://cdn.glitch.global/594c3a60-63c0-4741-a37f-f42ba1e0647d/40602765.jpg?v=1701554779474" />
+        
+         <a-mixin
+          id="frame"
+          geometry="primitive: plane; width: 0.5783552; height: 0.8192"
+          material="color: white; shader: flat"
+          animation__scale="property: scale; to: 2.2 2.2 2.2; dur: 200; startEvents: mouseenter"
+          animation__scale_reverse="property: scale; to: 2 2 2; dur: 200; startEvents: mouseleave"
+         ></a-mixin>
+         <a-mixin
+          id="poster"
+          geometry="primitive: plane; width: 0.544768; height: 0.786432"
+          material="color: white; shader: flat"
+          position="0 0 0.005"
+         ></a-mixin>
+         <a-mixin
+          id="movieImage"
+          geometry="primitive: plane; width: 1.5; height: 0.81"
+          material="src: #ponyo; shader: flat; transparent: true"
+          position="0 0.495 0.002"
+         ></a-mixin>
+      </a-assets>
+
+      <a-sky id="skybox" src="#point1"> </a-sky>
+
+      <a-entity id="cam" camera position="0 1.6 0" look-controls>
+        <a-entity
+          cursor="fuse:true;fuseTimeout:2000"
+          geometry="primitive:ring;radiusInner:0.01;radiusOuter:0.02"
+          position="0 0 -1.8"
+          src="#hotspot"
+          material="shader:flat;color:#ff0000"
+          animation__mouseenter="property:scale;to:3 3 3;startEvents:mouseenter;endEvents:mouseleave;dir:reverse;dur:2000;loop:1">
+        </a-entity>
+      </a-entity>
+      
+      <a-entity id="spots" hotspots>
+        
+        <a-entity id="group-point1" scale="1 1 1">
+          <a-image
+            spot="linkto:#point2;spotgroup:group-point2"
+            position="15 1 10"
+          ></a-image>
+          
+          <a-image
+            spot="linkto:#point3;spotgroup:group-point3"
+            position="-3 1 10"
+          ></a-image>
+          
+          <a-entity id="chileButton" position="-6.686 3.538 4.397" rotation="0 121.860 0" scale="2 2 2" mixin="frame" class="raycastable menu-button" cursor-listener hold-to-show>
+            <a-entity material="src: #chile;" mixin="poster"></a-entity>
+          </a-entity>
+          
+          <a-entity id="infoField1" visible="false">
+            <a-entity id="info1" geometry="primitive: plane" material="shader: gradient; topColor: 255 100 100; bottomColor: 100 100 200; offset: 0.0001" scale="4 2 2" position="-7.027 2.343 1.551" rotation="0 90 0" visible="true"></a-entity>
+            <a-text value="Paranal Observatory" position="-6.982 3.360 2.294" rotation="0 90 0" color="white" visible="true"  scale="0.7 0.7 0.7" font="https://cdn.aframe.io/fonts/DejaVu-sdf.fnt"></a-text>
+            <a-text value="At 2635 metres above sea level in the Atacama Desert of Chile, ESO’s Paranal Observatory is one of the very best astronomical observing sites in the world and is the flagship facility for European ground-based astronomy. It hosts several world-class telescopes; among them are the Very Large Telescope and the Visible and Infrared Survey Telescope for Astronomy. Other scientific and support facilities are also located at Paranal, including several smaller telescopes and an innovative accommodation facility known as the Residencia. The future ESO's Extremely Large Telescope will be operated from ESO's Paranal Observatory."
+                    position="-6.983 2.308 1.438"
+                    rotation="0 90 0"
+                    scale="0.750 0.600 0.600"
+                    color="white"
+                    anchor="center"
+                    visible="true"></a-text>
+          </a-entity>
+          
+        </a-entity>
+        
+        <a-entity id="group-point2" scale="0 0 0">
+          <a-image
+            spot="linkto:#point1;spotgroup:group-point1"
+            position="15 1 10"
+          ></a-image>
+          
+          <a-image
+            spot="linkto:#point3;spotgroup:group-point3"
+            position="-3 1 10"
+          ></a-image>
+          
+          <a-entity id="esoInButton" position="-6.686 1.639 -0.405" rotation="0 90 0" scale="2 2 2" mixin="frame" class="raycastable menu-button" cursor-listener3 hold-to-show>
+            <a-entity material="src: #eso_in;" mixin="poster"></a-entity>
+          </a-entity>
+          
+          <a-entity id="infoField2" visible="false">
+            <a-entity id="info2" geometry="primitive: plane" material="shader: gradient; topColor: 255 100 100; bottomColor: 100 100 200; offset: 0.0001" scale="4 2 2" position="-7.027 -0.862 -0.491" rotation="-5.634 90 0" visible="true"></a-entity>
+            <a-text value="ALMA correlator"
+                    position="-7.027 -0.117 0.523"
+                    rotation="-5.634 90 0"
+                    color="black"
+                    visible="true"
+                    scale="1 1 1"
+                    font="https://cdn.aframe.io/fonts/DejaVu-sdf.fnt"></a-text>
+            <a-text value="360 degree panorama of the ALMA correlator room, one of the most powerful supercomputers in the world, installed at the remote ALMA high altitude site in the Andes of northern Chile."
+                    position="-6.983 -0.883 -0.651"
+                    rotation="-5.634 90 0"
+                    scale="0.750 0.600 0.600"
+                    color="black"
+                    anchor="center"
+                    visible="true"></a-text>
+          </a-entity>
+        </a-entity>
+        
+        <a-entity id="group-point3" scale="0 0 0">
+          <a-image
+            spot="linkto:#point1;spotgroup:group-point1"
+            position="15 1 10"
+          ></a-image>
+          
+          <a-image
+            spot="linkto:#point2;spotgroup:group-point2"
+            position="-3 1 10"
+          ></a-image>
+          
+          <a-entity id="esoButton"  position="0.461 1.639 7.759" rotation="-180 6.142 -180" scale="2 2 2" mixin="frame" class="raycastable menu-button" cursor-listener2 hold-to-show>
+            <a-entity material="src: #eso;" mixin="poster"></a-entity>
+          </a-entity>
+          
+          <a-entity id="infoField3" visible="false">
+            <a-entity
+                      id="info3"
+                      geometry="primitive: plane"
+                      material="shader: gradient; topColor: 255 100 100; bottomColor: 100 100 200; offset: 0.0001"
+                      scale="4 2 2"
+                      position="4.269 2.343 10.028"
+                      rotation="0 -151.791 0"
+                      visible="true"></a-entity>
+            <a-text value="The Void of the ESO Supernova (panorama)"
+                    position="6.209 3.36 8.662"
+                    rotation="0 -151.801 0"
+                    color="white"
+                    visible="true"
+                    scale="1 1.030 0.7"
+                    font="https://cdn.aframe.io/fonts/DejaVu-sdf.fnt"></a-text>
+            <a-text value="This 360 degree panorama immerses you into the Void of the ESO Supernova Planetarium & Visitor Centre from the second floor of the building."
+                    position="4.152 2.308 9.953"
+                    rotation="0 -151.791 0"
+                    scale="0.75 0.6 0.6"
+                    color="white"
+                    anchor="center"
+                    visible="true"></a-text>
+          </a-entity>
+        </a-entity>
+        
+      </a-entity>
+    </a-scene>
+    <script>
+      AFRAME.registerComponent('cursor-listener', {
+        init: function () {
+          const el = this.el;
+          let timer = null;
+
+          el.addEventListener('mouseenter', function () {
+            timer = setTimeout(function () {
+              const infoField = document.getElementById('infoField1');
+              // infoField.setAttribute('dur', '500')
+              infoField.setAttribute('visible', 'true');
+            }, 3000);
+          });
+
+          el.addEventListener('mouseleave', function () {
+            clearTimeout(timer);
+            const infoField = document.getElementById('infoField1');
+            infoField.setAttribute('visible', 'false');
+          });
+        }
+      });
+      
+      AFRAME.registerComponent('cursor-listener2', {
+        init: function () {
+          const el = this.el;
+          let timer = null;
+
+          el.addEventListener('mouseenter', function () {
+            timer = setTimeout(function () {
+              const infoField = document.getElementById('infoField3');
+              infoField.setAttribute('visible', 'true');
+            }, 3000);
+          });
+
+          el.addEventListener('mouseleave', function () {
+            clearTimeout(timer);
+            const infoField = document.getElementById('infoField3');
+            infoField.setAttribute('visible', 'false');
+          });
+        }
+      });
+      AFRAME.registerComponent('cursor-listener3', {
+        init: function () {
+          const el = this.el;
+          let timer = null;
+
+          el.addEventListener('mouseenter', function () {
+            timer = setTimeout(function () {
+              const infoField = document.getElementById('infoField2');
+              infoField.setAttribute('visible', 'true');
+            }, 3000);
+          });
+
+          el.addEventListener('mouseleave', function () {
+            clearTimeout(timer);
+            const infoField = document.getElementById('infoField2');
+            infoField.setAttribute('visible', 'false');
+          });
+        }
+      });
+    </script>
+ </body>
+</html>
