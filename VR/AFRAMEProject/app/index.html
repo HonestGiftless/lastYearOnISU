@@ -1,47 +1,47 @@
 <!DOCTYPE html>
 <html>
- <head>
-    <meta charset="utf-8" />
-    <title>360&deg; Image</title>
-    <meta name="description" content="360&deg; Image - A-Frame" />
-    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-    <script src="https://unpkg.com/aframe-animation-component@^4.1.2/dist/aframe-animation-component.min.js"></script>
-    <script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
-    <script src="https://rawgit.com/zcanter/aframe-gradient-sky/master/dist/gradientsky.min.js"></script>
-    <script>
-      AFRAME.registerComponent('hotspots',{
-        init:function(){
-            this.el.addEventListener('reloadspots',function(evt){
-           
-            var currspotgroup=document.getElementById(evt.detail.currspots);
-            currspotgroup.setAttribute("scale","0 0 0");
-           
-            var newspotgroup=document.getElementById(evt.detail.newspots);
-            newspotgroup.setAttribute("scale","1 1 1");
-          });
-        }
-      });
-     
-      AFRAME.registerComponent('spot',{
-        schema: {
-          linkto: { type: "string", default: "" },
-          spotgroup: { type: "string", default: "" }
-        },
-        init: function() {
-          this.el.setAttribute("src", "#hotspot");
-          this.el.setAttribute("look-at", "#cam");
-          var data = this.data;
-          this.el.addEventListener('click', function() {
-            var sky = document.getElementById("skybox");
-            sky.setAttribute("src", data.linkto);
-            var spotcomp = document.getElementById("spots");
-            var currspots = this.parentElement.getAttribute("id");
-            spotcomp.emit('reloadspots', { newspots: data.spotgroup, currspots: currspots });
-          });
-        }
-      });
-    </script>
- </head>
+<head>
+   <meta charset="utf-8" />
+   <title>360&deg; Image</title>
+   <meta name="description" content="360&deg; Image - A-Frame" />
+   <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+   <script src="https://unpkg.com/aframe-animation-component@^4.1.2/dist/aframe-animation-component.min.js"></script>
+   <script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
+   <script src="https://rawgit.com/zcanter/aframe-gradient-sky/master/dist/gradientsky.min.js"></script>
+   <script>
+     AFRAME.registerComponent('hotspots',{
+       init:function(){
+           this.el.addEventListener('reloadspots',function(evt){
+          
+           var currspotgroup=document.getElementById(evt.detail.currspots);
+           currspotgroup.setAttribute("scale","0 0 0");
+          
+           var newspotgroup=document.getElementById(evt.detail.newspots);
+           newspotgroup.setAttribute("scale","1 1 1");
+         });
+       }
+     });
+    
+     AFRAME.registerComponent('spot',{
+       schema: {
+         linkto: { type: "string", default: "" },
+         spotgroup: { type: "string", default: "" }
+       },
+       init: function() {
+         this.el.setAttribute("src", "#hotspot");
+         this.el.setAttribute("look-at", "#cam");
+         var data = this.data;
+         this.el.addEventListener('click', function() {
+           var sky = document.getElementById("skybox");
+           sky.setAttribute("src", data.linkto);
+           var spotcomp = document.getElementById("spots");
+           var currspots = this.parentElement.getAttribute("id");
+           spotcomp.emit('reloadspots', { newspots: data.spotgroup, currspots: currspots });
+         });
+       }
+     });
+   </script>
+</head>
 
  <body>
     <a-scene>
